@@ -1,6 +1,11 @@
 # docker-adonis
 docker environment for develop AdonisJS
 
+Clone this git project to start your own AdonisJS Development Environment by Docker
+```
+git clone https://github.com/xnohat/docker-adonis
+```
+
 folder structure
 ```
 /
