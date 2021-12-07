@@ -32,6 +32,17 @@ while getopts ":hrgcidspn" option; do
   esac
 done
 
+#Get app .env
+COMPOSE_PROJECT_NAME=$(grep COMPOSE_PROJECT_NAME .env | grep -v -e '^\s*#' | cut -d '=' -f 2- | tr -d '"\r\n')
+GIT_REPO=$(grep GIT_REPO .env | grep -v -e '^\s*#' | cut -d '=' -f 2- | tr -d '"\r\n')
+GIT_BRANCH=$(grep GIT_BRANCH .env | grep -v -e '^\s*#' | cut -d '=' -f 2- | tr -d '"\r\n')
+DB_DATABASE=$(grep DB_DATABASE .env | grep -v -e '^\s*#' | cut -d '=' -f 2- | tr -d '"\r\n')
+DB_USERNAME=$(grep DB_USERNAME .env | grep -v -e '^\s*#' | cut -d '=' -f 2- | tr -d '"\r\n')
+DB_PASSWORD=$(grep DB_PASSWORD .env | grep -v -e '^\s*#' | cut -d '=' -f 2- | tr -d '"\r\n')
+SSH_REMOTE_SERVER=$(grep SSH_REMOTE_SERVER .env | grep -v -e '^\s*#' | cut -d '=' -f 2- | tr -d '"\r\n')
+SSH_REMOTE_SERVER_USER=$(grep SSH_REMOTE_SERVER_USER .env | grep -v -e '^\s*#' | cut -d '=' -f 2- | tr -d '"\r\n')
+SSH_REMOTE_SERVER_PASSWORD=$(grep SSH_REMOTE_SERVER_PASSWORD .env | grep -v -e '^\s*#' | cut -d '=' -f 2- | tr -d '"\r\n')
+
 #Init New Project
 if [ "$initnewproj_flag" = true ]; then
     docker run -it --rm -v `pwd`:/usr/src/app -w /usr/src/app -u $(id -u ${USER}):$(id -g ${USER}) node:16-alpine sh -c "npm init adonis-ts-app@latest src"
@@ -49,9 +60,9 @@ fi
 #Clone or Pull source
 if [ "$gitnewsource_flag" = true ]; then
     if [ "$clonesource_flag" = true ]; then #clone
-        sudo rm -rf ./src && git clone https://$githubpat@github.com/xnohat/mobipos-api.git -b develop src
+        sudo rm -rf ./src && git clone https://$githubpat@${GIT_REPO} -b ${GIT_BRANCH} src
     else #pull
-        cd ./src && git pull https://$githubpat@github.com/xnohat/mobipos-api.git develop && cd ../
+        cd ./src && git pull https://$githubpat@${GIT_REPO} ${GIT_BRANCH} && cd ../
     fi
 fi
 
@@ -81,15 +92,6 @@ else
     docker-compose build --force-rm
     docker-compose up -d --build
 fi
-
-#Get app .env
-COMPOSE_PROJECT_NAME=$(grep COMPOSE_PROJECT_NAME .env | grep -v -e '^\s*#' | cut -d '=' -f 2- | tr -d '"\r\n')
-DB_DATABASE=$(grep DB_DATABASE .env | grep -v -e '^\s*#' | cut -d '=' -f 2- | tr -d '"\r\n')
-DB_USERNAME=$(grep DB_USERNAME .env | grep -v -e '^\s*#' | cut -d '=' -f 2- | tr -d '"\r\n')
-DB_PASSWORD=$(grep DB_PASSWORD .env | grep -v -e '^\s*#' | cut -d '=' -f 2- | tr -d '"\r\n')
-SSH_REMOTE_SERVER=$(grep SSH_REMOTE_SERVER .env | grep -v -e '^\s*#' | cut -d '=' -f 2- | tr -d '"\r\n')
-SSH_REMOTE_SERVER_USER=$(grep SSH_REMOTE_SERVER_USER .env | grep -v -e '^\s*#' | cut -d '=' -f 2- | tr -d '"\r\n')
-SSH_REMOTE_SERVER_PASSWORD=$(grep SSH_REMOTE_SERVER_PASSWORD .env | grep -v -e '^\s*#' | cut -d '=' -f 2- | tr -d '"\r\n')
 
 #Database Sync from Production
 if [ "$databasesync_flag" = true ]; then
