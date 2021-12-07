@@ -1,0 +1,75 @@
+find -name "*.ts" -not -path "./node_modules/*"| xargs tsc --target "ES2020" --module "commonjs" --noUnusedLocals true --skipLibCheck true --noUnusedParameters true --removeComments true --declaration false --moduleResolution node --strictNullChecks true --allowSyntheticDefaultImports true --emitDecoratorMetadata true --experimentalDecorators true --esModuleInterop true --sourceMap true --allowUnreachableCode true --strictNullChecks false --noUnusedLocals false --rootDir "./" --baseUrl "./" --types "@adonisjs/core","@adonisjs/repl" --lib "ES2020"
+
+rm env.js && tsc env.ts --target "ES2020" --module "commonjs" --noUnusedLocals true --skipLibCheck true --noUnusedParameters true --removeComments true --declaration false --moduleResolution node --strictNullChecks true --allowSyntheticDefaultImports true --emitDecoratorMetadata true --experimentalDecorators true --esModuleInterop true --sourceMap true --allowUnreachableCode true --strictNullChecks false --noUnusedLocals false --rootDir "./" --baseUrl "./" --types "@adonisjs/core,@adonisjs/repl" --lib "ES2020" 
+
+tsc env.ts -p tsconfig.json --outDir null
+
+{
+  options: {
+    target: 7,
+    module: 1,
+    lib: [ 'lib.es2020.d.ts' ],
+    noUnusedLocals: true,
+    skipLibCheck: true,
+    incremental: true,
+    noUnusedParameters: true,
+    removeComments: true,
+    declaration: false,
+    moduleResolution: 2,
+    outDir: '/usr/src/app/build',
+    strictNullChecks: true,
+    allowSyntheticDefaultImports: true,
+    emitDecoratorMetadata: true,
+    experimentalDecorators: true,
+    esModuleInterop: true,
+    rootDir: '/usr/src/app',
+    baseUrl: '/usr/src/app',
+    sourceMap: false,
+    paths: {
+      'App/*': [Array],
+      'Config/*': [Array],
+      'Contracts/*': [Array],
+      'Database/*': [Array]
+    },
+    types: [ '@adonisjs/core', '@adonisjs/repl', 'adonis5-scheduler' ],
+    pathsBasePath: '/usr/src/app',
+    configFilePath: '/usr/src/app/tsconfig.json'
+  },
+  watchOptions: undefined,
+  fileNames: [
+    '/usr/src/app/env.ts',
+    '/usr/src/app/server.ts',
+    '/usr/src/app/app/Exceptions/Handler.ts',
+    '/usr/src/app/commands/index.ts',
+    '/usr/src/app/config/app.ts',
+    '/usr/src/app/config/bodyparser.ts',
+    '/usr/src/app/config/cors.ts',
+    '/usr/src/app/config/drive.ts',
+    '/usr/src/app/config/hash.ts',
+    '/usr/src/app/contracts/drive.ts',
+    '/usr/src/app/contracts/env.ts',
+    '/usr/src/app/contracts/events.ts',
+    '/usr/src/app/contracts/hash.ts',
+    '/usr/src/app/providers/AppProvider.ts',
+    '/usr/src/app/start/kernel.ts',
+    '/usr/src/app/start/routes.ts'
+  ],
+  projectReferences: undefined,
+  typeAcquisition: { enable: false, include: [], exclude: [] },
+  raw: {
+    extends: './node_modules/adonis-preset-ts/tsconfig',
+    include: [ '**/*' ],
+    exclude: [ 'node_modules', 'build' ],
+    compilerOptions: {
+      outDir: 'build',
+      rootDir: './',
+      sourceMap: false,
+      paths: [Object],
+      types: [Array]
+    },
+    compileOnSave: undefined
+  },
+  errors: [],
+  wildcardDirectories: { '/usr/src/app': 1 },
+  compileOnSave: false
+}

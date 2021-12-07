@@ -1,0 +1,98 @@
+version: "3.2"
+
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge
+#Volumes
+volumes:
+  dbdata:
+    driver: local
+  redisdata:
+    driver: local
+  app_adonisjs_node_modules:
+    driver: local
+
+services:
+  #NodeJS App
+  app: &app-template
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ${COMPOSE_PROJECT_NAME}_adonisjs
+    container_name: ${COMPOSE_PROJECT_NAME}_app
+    hostname: ${COMPOSE_PROJECT_NAME}_app
+    restart: unless-stopped
+    tty: true
+    environment:
+      LOG_LEVEL:
+      NODE_TLS_REJECT_UNAUTHORIZED: 0
+      CHOKIDAR_USEPOLLING: 'true' # For Windows, we need to enable Chokidar polling so our file changes reflect in real-time.
+    working_dir: /usr/src/app
+    volumes:
+      - ./src:/usr/src/app
+      - ./etc/app/ecosystem.config.js:/usr/src/app/ecosystem.config.js
+      - app_adonisjs_node_modules:/usr/src/app/node_modules
+    ports:
+      - "127.0.0.1:3333:3333"
+    networks:
+      - app-network
+
+  # Supervisor & Cron (through supervisor) service
+  #supervisord:
+  #  <<: *app-template
+  #  container_name: ${COMPOSE_PROJECT_NAME}_supervisord
+  #  expose: []
+  #  command: ["/usr/bin/supervisord"]
+  #  ports:
+  #    - "127.0.0.1:3334:3334"
+
+  #Nginx Service
+  webserver:
+    image: nginx:alpine
+    container_name: ${COMPOSE_PROJECT_NAME}_webserver
+    hostname: ${COMPOSE_PROJECT_NAME}_webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "127.0.0.1:80:80"
+      - "127.0.0.1:443:443"
+    volumes:
+      - ./etc/nginx/conf.d:/etc/nginx/conf.d
+      - ./etc/selfsignedssl:/etc/selfsignedssl
+    networks:
+      - app-network
+
+  #MySQL Service
+  db:
+    image: mysql:5.7.36
+    container_name: ${COMPOSE_PROJECT_NAME}_db
+    hostname: ${COMPOSE_PROJECT_NAME}_db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "127.0.0.1:${DB_PORT}:3306"
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - dbdata:/var/lib/mysql
+      - ./etc/mysql/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - app-network
+
+  #Redis Service
+  redis:
+    image: redis:4.0
+    container_name: ${COMPOSE_PROJECT_NAME}_redis
+    hostname: ${COMPOSE_PROJECT_NAME}_redis
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - redisdata:/data
+    networks:
+      - app-network

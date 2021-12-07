@@ -1,0 +1,2 @@
+# Cron use root user (instead www-data with sudo), because we need to redirect logs into /dev/stdout /dev/stderr for container
+* * * * * cd /usr/src/app && sudo -u root /usr/local/bin/node ace scheduler:run > /proc/1/fd/1 2>/proc/1/fd/2
