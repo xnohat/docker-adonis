@@ -48,8 +48,8 @@ GIT_BRANCH
 ```
 
 Your development website will access on port 80 (through Nginx as reverse proxy):\
-http://localhost\
+http://localhost \
 Your nodejs website cat directly access on port 3333:\
-http://localhost:3333\
+http://localhost:3333 
 
 Read docker-compose.yml, Dockerfile, and ./build.sh source for more information
