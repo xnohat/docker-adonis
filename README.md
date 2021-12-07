@@ -39,9 +39,9 @@ Example use:
 ```
 Follow screen guide to Init new AdonisJS project in ./src
 
-2. Pull new updates of project from Git
-edit ./.env of docker compose
-GIT_REPO
+2. Pull new updates of project from Git\
+edit ./.env of docker compose for specify git repo and branch to pull\
+GIT_REPO\
 GIT_BRANCH
 ```
 ./build.sh -g -p
