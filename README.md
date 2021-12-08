@@ -35,7 +35,7 @@ Example use:
 
 1. Start new project
 ```
-./build.sh -i
+./build.sh -i -p
 ```
 Follow screen guide to Init new AdonisJS project in ./src
 
@@ -45,6 +45,10 @@ GIT_REPO\
 GIT_BRANCH
 ```
 ./build.sh -g -p
+```
+notes: if you need "clone" project instead "pull" , use -g -c params
+```
+./build.sh -g -c -p
 ```
 
 Your development website will access on port 80 (through Nginx as reverse proxy):\
