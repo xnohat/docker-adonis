@@ -11,7 +11,8 @@ folder structure
 /
 -/etc : all config files of stack
  --/app : all specific app config files
-  --/.env : .env file of AdonisJS app
+  --/.env.dev : .env file of AdonisJS app but for DEV environment
+  --/.env.prod : .env file of AdonisJS app but for PROD environment
 -/src : source code of app
 -/.env : .env file of Docker Compose
 -/build.sh : build script tool
@@ -29,6 +30,7 @@ usage: ./build.sh
     [-d] Database Sync from Production
     [-p] Packages Install (npm)
     [-n] No cache layers when build
+    [-x] xBuild app image and stacks for PRODUCTION (default is build for Dev)
 ```
 
 Example use:
@@ -51,7 +53,14 @@ notes: if you need "clone" project instead "pull" , use -g -c params
 ./build.sh -g -c -p
 ```
 
-Your development website will access on port 80 (through Nginx as reverse proxy):\
+3. Build PRODUCTION image and stacks (it's mean build target: prod)\
+```
+./build.sh -x
+```
+notes: file ./etc/app/.env.dev and ./etc/app/.env.prod are .env files of AdonisJS app but for DEV and PROD environment, change them for specific target build environment you need\
+Default target environment of ./build.sh is DEV
+
+Your website will access on port 80 (through Nginx as reverse proxy):\
 http://localhost \
 Your nodejs website cat directly access on port 3333:\
 http://localhost:3333 
