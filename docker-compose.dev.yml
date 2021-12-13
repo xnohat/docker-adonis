@@ -1,0 +1,12 @@
+version: "3.2"
+
+services:
+  #NodeJS App
+  app: &app-template
+    build:
+      target: dev
+    volumes:
+      - ./src:/usr/src/app
+      - ./etc/app/.env.dev:/usr/src/app/.env
+      - ./etc/app/ecosystem.config.js:/usr/src/app/ecosystem.config.js
+      - app_adonisjs_node_modules:/usr/src/app/node_modules

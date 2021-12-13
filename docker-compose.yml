@@ -19,6 +19,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      #target: get from .dev.yml or .prod.yml
     image: ${COMPOSE_PROJECT_NAME}_adonisjs
     container_name: ${COMPOSE_PROJECT_NAME}_app
     hostname: ${COMPOSE_PROJECT_NAME}_app
@@ -29,10 +30,7 @@ services:
       NODE_TLS_REJECT_UNAUTHORIZED: 0
       CHOKIDAR_USEPOLLING: 'true' # For Windows, we need to enable Chokidar polling so our file changes reflect in real-time.
     working_dir: /usr/src/app
-    volumes:
-      - ./src:/usr/src/app
-      - ./etc/app/ecosystem.config.js:/usr/src/app/ecosystem.config.js
-      - app_adonisjs_node_modules:/usr/src/app/node_modules
+    #volumes: get from .dev.yml or .prod.yml
     ports:
       - "127.0.0.1:3333:3333"
     networks:

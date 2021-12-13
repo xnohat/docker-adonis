@@ -9,7 +9,8 @@ databasesync_flag=false
 syncresources_flag=false
 packageinstall_flag=false
 nocachebuild_flag=false
-while getopts ":hrgcidspn" option; do
+xbuildproduction_flag=false
+while getopts ":hrgcidspnx" option; do
   case $option in
     h) echo -e "usage: $0 
     [-h] Help 
@@ -19,7 +20,8 @@ while getopts ":hrgcidspn" option; do
     [-i] Init New Project in folder src 
     [-d] Database Sync from Production 
     [-p] Packages Install (npm)  
-    [-n] No cache layers when build"; exit ;;
+    [-n] No cache layers when build
+    [-x] xBuild app image and stacks for PRODUCTION (default is build for Dev)"; exit ;;
     r) removetoken_flag=true ;;
     g) gitnewsource_flag=true ;;
     c) clonesource_flag=true ;;
@@ -28,6 +30,7 @@ while getopts ":hrgcidspn" option; do
     s) syncresources_flag=true ;;
     p) packageinstall_flag=true ;;
     n) nocachebuild_flag=true ;;
+    x) xbuildproduction_flag=true ;;
     ?) echo "error: option -$OPTARG is not implemented"; exit ;;
   esac
 done
@@ -69,9 +72,6 @@ fi
 #Chmod 777 for Source Folder
 chmod 777 ./src
 
-#Copy .env to source
-sudo cp ./etc/app/.env ./src/
-
 #Remember or Forget Github personal access token cache
 if [ "$removetoken_flag" = true ]; then
     rm .githubpatcache
@@ -86,11 +86,21 @@ fi
 
 #Process Build Stacks
 if [ "$nocachebuild_flag" = true ]; then
-    docker-compose build --force-rm --no-cache
-    docker-compose up -d   
+    if [ "$xbuildproduction_flag" = true ]; then
+        docker-compose -f docker-compose.yml -f docker-compose.prod.yml build --force-rm --no-cache
+        docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+    else
+        docker-compose -f docker-compose.yml -f docker-compose.dev.yml build --force-rm --no-cache
+        docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+    fi   
 else
-    docker-compose build --force-rm
-    docker-compose up -d --build
+    if [ "$xbuildproduction_flag" = true ]; then
+        docker-compose -f docker-compose.yml -f docker-compose.prod.yml build --force-rm
+        docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+    else
+        docker-compose -f docker-compose.yml -f docker-compose.dev.yml build --force-rm
+        docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+    fi
 fi
 
 #Database Sync from Production

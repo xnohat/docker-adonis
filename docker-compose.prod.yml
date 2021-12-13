@@ -1,0 +1,10 @@
+version: "3.2"
+
+services:
+  #NodeJS App
+  app: &app-template
+    build:
+      target: prod
+    volumes:
+      - ./etc/app/.env.prod:/usr/src/app/.env
+      - ./etc/app/ecosystem.config.js:/usr/src/app/ecosystem.config.js
