@@ -2,9 +2,13 @@ version: "3.2"
 
 services:
   #NodeJS App
-  app: &app-template
+  app:
     build:
       target: dev
+    command: > #in DEV env must install adonis5-scheduler because src and node_modules folder overrided by mount from external, final it must run node ace serve --watch as in Dockerfile build because command also override CMD
+      sh -c "npm install adonis5-scheduler
+      && node ace invoke adonis5-scheduler
+      && node ace serve --watch"
     volumes:
       - ./src:/usr/src/app
       - ./etc/app/.env.dev:/usr/src/app/.env

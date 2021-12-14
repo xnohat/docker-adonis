@@ -67,10 +67,11 @@ if [ "$gitnewsource_flag" = true ]; then
     else #pull
         cd ./src && git pull https://$githubpat@${GIT_REPO} ${GIT_BRANCH} && cd ../
     fi
-fi
 
-#Chmod 777 for Source Folder
-chmod 777 ./src
+    #Chmod 777 for Source Folder
+    chmod 777 ./src
+
+fi
 
 #Remember or Forget Github personal access token cache
 if [ "$removetoken_flag" = true ]; then

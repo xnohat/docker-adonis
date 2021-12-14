@@ -2,7 +2,7 @@ version: "3.2"
 
 services:
   #NodeJS App
-  app: &app-template
+  app:
     build:
       target: prod
     volumes:

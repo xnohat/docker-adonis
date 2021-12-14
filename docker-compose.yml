@@ -15,7 +15,7 @@ volumes:
 
 services:
   #NodeJS App
-  app: &app-template
+  app:
     build:
       context: .
       dockerfile: Dockerfile
@@ -37,13 +37,23 @@ services:
       - app-network
 
   # Supervisor & Cron (through supervisor) service
-  #supervisord:
-  #  <<: *app-template
-  #  container_name: ${COMPOSE_PROJECT_NAME}_supervisord
-  #  expose: []
-  #  command: ["/usr/bin/supervisord"]
-  #  ports:
-  #    - "127.0.0.1:3334:3334"
+  supervisord:
+    image: ${COMPOSE_PROJECT_NAME}_adonisjs
+    container_name: ${COMPOSE_PROJECT_NAME}_supervisord
+    hostname: ${COMPOSE_PROJECT_NAME}_supervisord
+    restart: unless-stopped
+    tty: true
+    environment:
+      LOG_LEVEL:
+      NODE_TLS_REJECT_UNAUTHORIZED: 0
+      CHOKIDAR_USEPOLLING: 'true' # For Windows, we need to enable Chokidar polling so our file changes reflect in real-time.
+    working_dir: /usr/src/app
+    expose: []
+    command: ["/usr/bin/supervisord"]
+    ports:
+      - "127.0.0.1:3334:3334"
+    networks:
+      - app-network
 
   #Nginx Service
   webserver:

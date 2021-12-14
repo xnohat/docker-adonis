@@ -25,7 +25,20 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
       cron \
       locales
 
+# Clean-up apt cache
+RUN rm -rf /tmp/* \
+&& rm -rf /var/list/apt/* \
+&& rm -rf /var/lib/apt/lists/* \
+&& apt-get clean
+
+# Install Lazygit
 RUN cd /root && wget https://github.com/jesseduffield/lazygit/releases/download/v0.31.4/lazygit_0.31.4_Linux_x86_64.tar.gz && tar -zxvf lazygit_0.31.4_Linux_x86_64.tar.gz && cp ./lazygit /usr/bin/ && cd /usr/src/app
+
+# Add Supervisor conf and & crontab by supervisor
+RUN mkdir -p /var/log/supervisor
+COPY --chown=root:root ./etc/supervisor/conf.d/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY --chown=root:crontab ./etc/cron/root /var/spool/cron/crontabs/root
+RUN chmod 0600 /var/spool/cron/crontabs/root
 
 # Copy source of app to image
 COPY --chown=node:node ./src ./
