@@ -10,8 +10,8 @@ volumes:
     driver: local
   redisdata:
     driver: local
-  app_adonisjs_node_modules:
-    driver: local
+  #app_adonisjs_node_modules:
+  #  driver: local
 
 services:
   #NodeJS App

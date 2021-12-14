@@ -7,4 +7,4 @@ services:
       target: prod
     volumes:
       - ./etc/app/.env.prod:/usr/src/app/.env
-      - ./etc/app/ecosystem.config.js:/usr/src/app/ecosystem.config.js
+      #- ./etc/app/ecosystem.config.js:/usr/src/app/ecosystem.config.js
