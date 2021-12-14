@@ -88,19 +88,19 @@ fi
 #Process Build Stacks
 if [ "$nocachebuild_flag" = true ]; then
     if [ "$xbuildproduction_flag" = true ]; then
-        docker-compose -f docker-compose.yml -f docker-compose.prod.yml build --force-rm --no-cache
-        docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+        docker compose -f docker-compose.yml -f docker-compose.prod.yml build --force-rm --no-cache
+        docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
     else
-        docker-compose -f docker-compose.yml -f docker-compose.dev.yml build --force-rm --no-cache
-        docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+        docker compose -f docker-compose.yml -f docker-compose.dev.yml build --force-rm --no-cache
+        docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
     fi   
 else
     if [ "$xbuildproduction_flag" = true ]; then
-        docker-compose -f docker-compose.yml -f docker-compose.prod.yml build --force-rm
-        docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+        docker compose -f docker-compose.yml -f docker-compose.prod.yml build --force-rm
+        docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
     else
-        docker-compose -f docker-compose.yml -f docker-compose.dev.yml build --force-rm
-        docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+        docker compose -f docker-compose.yml -f docker-compose.dev.yml build --force-rm
+        docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
     fi
 fi
 
