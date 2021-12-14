@@ -82,7 +82,7 @@ COPY ./etc/app/.env.prod .env
 
 # Compile adonisjs
 RUN mkdir -p ./build
-RUN node ace build --production
+RUN node ace build --production --ignore-ts-errors
 RUN cd ./build && npm ci --production
 RUN yes | cp -rf .env build/.env
 
