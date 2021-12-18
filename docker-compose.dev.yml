@@ -5,12 +5,23 @@ services:
   app:
     build:
       target: dev
+    user: $UID:$GID
     command: > #in DEV env must npm install because src and node_modules folder overrided by mount from external, final it must run node ace serve --watch as in Dockerfile build because command also override CMD
       sh -c "npm install
       && npm install adonis5-scheduler
       && node ace invoke adonis5-scheduler
       && node ace serve --watch"
     volumes:
+      #map current host users to docker container
+      - ./etc/home/user:/home/$USER
+      - /etc/group:/etc/group:ro
+      - /etc/passwd:/etc/passwd:ro
+      - /etc/shadow:/etc/shadow:ro
+      - /etc/sudoers.d:/etc/sudoers.d:ro
+      #src and app folders mounting
       - ./src:/usr/src/app
       - ./etc/app/.env.dev:/usr/src/app/.env
       #- app_adonisjs_node_modules:/usr/src/app/node_modules
+  supervisord:
+    entrypoint: ["echo", "Service disabled on Dev environment"]
+    restart: "no"

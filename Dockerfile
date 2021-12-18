@@ -41,7 +41,7 @@ COPY --chown=root:crontab ./etc/cron/root /var/spool/cron/crontabs/root
 RUN chmod 0600 /var/spool/cron/crontabs/root
 
 # Copy source of app to image
-COPY --chown=node:node ./src ./
+COPY --chown=root:root ./src ./
 
 # Copy package.json & package-lock.json
 #COPY ./src/package*.json ./

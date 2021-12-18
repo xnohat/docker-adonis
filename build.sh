@@ -86,19 +86,30 @@ if [ "$removetoken_flag" = true ]; then
 fi
 
 #Process Build Stacks
+export USER=$(whoami)
+export UID=$(id -u)
+export GID=$(id -g)
 if [ "$nocachebuild_flag" = true ]; then
     if [ "$xbuildproduction_flag" = true ]; then
+        echo "Build Production with NO CACHE"
         docker-compose -f docker-compose.yml -f docker-compose.prod.yml build --force-rm --no-cache
         docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
     else
+        echo "Build Development with NO CACHE"
+        mkdir -p ./etc/home/user/
+        sudo chown $UID:$GID -R ./etc/home/user/
         docker-compose -f docker-compose.yml -f docker-compose.dev.yml build --force-rm --no-cache
         docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
     fi   
 else
     if [ "$xbuildproduction_flag" = true ]; then
+        echo "Build Production with CACHE"
         docker-compose -f docker-compose.yml -f docker-compose.prod.yml build --force-rm
         docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
     else
+        echo "Build Development with CACHE"
+        mkdir -p ./etc/home/user/
+        sudo chown $UID:$GID -R ./etc/home/user/
         docker-compose -f docker-compose.yml -f docker-compose.dev.yml build --force-rm
         docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
     fi
